@@ -1,0 +1,37 @@
+---
+
+- hosts: all
+  sudo: yes
+  tasks:
+  - name: del_account_ip chattr
+    shell: chattr -i /home/{{ user_name }}/.ssh/authorized_keys;
+    when: action == 'del_account_ip'
+  - name: del_account_ip remove user
+    user: name={{ user_name }} state=absent remove=yes;
+    when: action == 'del_account_ip'
+  - name: del_account_ip remove sudoer
+    file: path=/etc/sudoers.d/{{ user_name }} state=absent;
+    when: action == 'del_account_ip'
+  - name: sync__authorized_keys chattr
+    shell: chattr -i /home/{{ user_name }}/.ssh/authorized_keys && rm -rf /home/{{ user_name }}/.ssh/authorized_keys
+    when: action == 'sync__authorized_keys'
+  - name: sync__authorized_keys group
+    group: name={{ user_name }} gid={{ uid }}
+    when: action == 'sync__authorized_keys'
+  - name: sync__authorized_keys user
+    user: name={{ user_name }}  group={{ user_name }}  uid={{ uid }}
+    when: action == 'sync__authorized_keys'
+  - name: sync__authorized_keys authorized_key
+    authorized_key: user={{ user_name }} key=/home/{{ user_name }}/.ssh/id_rsa.pub
+    when: action == 'sync__authorized_keys'
+  - name: sync__authorized_keys chattr -i
+    shell: chattr +i /home/{{ user_name }}/.ssh/authorized_keys
+    when: action == 'sync__authorized_keys'
+
+  - name: sync_sudoers
+    copy: src=/data/sudoers/{{ user_name }} dest=/etc/sudoers.d/{{ user_name }} group=root owner=root mode=440
+    when: action == 'sync_sudoers'
+
+  - name: del_sudoers
+    file: path=/etc/sudoers.d/{{ user_name }} state=absent
+    when: action == 'del_sudoers'

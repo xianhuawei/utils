@@ -1,0 +1,16 @@
+echo 'alias bond0 bonding
+options bond0 mode=0 miimon=100 use_carrier=0' > /etc/modprobe.d/bonding.conf
+
+for i in /sys/class/net/e*;do 
+	eth=`echo $i|awk -F'/' '{print $NF}'`
+	echo "DEVICE=$eth
+ONBOOT=yes
+SLAVE=yes
+MASTER=bond0
+HOTPLUG=no
+TYPE=Ethernet
+BOOTPROTO=none">/etc/sysconfig/network-scripts/ifcfg-$eth;
+done
+
+eth=`for i in /sys/class/net/e*;do echo $i|awk -F'/' '{print $NF}';done`
+ifenslave bond0 $eth

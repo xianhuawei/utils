@@ -1,0 +1,43 @@
+---
+- hosts: center_control
+  sudo: yes
+  tasks:
+  - name: del_account kill online user
+    shell: pkill -kill -U {{ user_name }} chdir=/tmp
+    when: action == 'del_account'
+  - name: del_account chattr
+    shell: chattr -i /home/{{ user_name }} /.ssh/id_rsa chdir=/tmp
+    when: action == 'del_account'
+  - name: del_account remove group
+    group: name={{ user_name }} state=absent remove=yes
+    when: action == 'del_account'
+  - name: del_account remove user
+    user: name={{ user_name }} state=absent remove=yes
+    when: action == 'del_account'
+
+  - name: create_account_key group
+    group: name={{ user_name }} gid={{ uid }}
+    when: action == 'create_account_key'
+  - name: create_account_key user
+    user: name={{ user_name }} group={{ user_name }} shell=/usr/sbin/shell uid={{ uid }}
+    when: action == 'create_account_key'
+  - name: create_sudoers
+    shell: echo '{{ user_name }}     ALL=(ALL)   NOPASSWD:{{ cmd_list }}' >/data/sudoers/{{ user_name }}
+    when: action == 'create_sudoers'
+
+- hosts: jumpserver
+  sudo: yes
+  tasks:
+  - name: create_account_key group jumpserver
+    group: name={{ user_name }} gid={{ uid }}
+    when: action == 'create_account_key'
+  - name: create_account_key user jumpserver
+    user: name={{ user_name }} group={{ user_name }} shell=/usr/sbin/shell uid={{ uid }}
+    when: action == 'create_account_key'
+  - name: create_account_key copy
+    copy: /home/{{ user_name }}/.ssh /home/{{ user_name }}/.ssh group={{ user_name }} owner={{ user_name }}
+    when: action == 'create_account_key'
+  - name: create_account_key chattr +i
+    shell: chattr +i /home/{{ user_name }}/.ssh/id_rsa
+    when: action == 'create_account_key'
+

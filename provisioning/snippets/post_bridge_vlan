@@ -1,0 +1,17 @@
+####bridge && vlan
+
+#VLAN_ID=140
+#echo "DEVICE=br$VLAN_ID
+#ONBOOT=yes
+#BOOTPROTO=none
+#TYPE=Bridge
+#">/etc/sysconfig/network-scripts/ifcfg-br$VLAN_ID
+
+#echo "DEVICE=bond0.$VLAN_ID
+#TYPE=Ethernet
+#ONBOOT=yes
+#BOOTPROTO=static
+#BRIDGE=br140
+#HOTPLUG=no
+#VLAN=yes
+#USERCTL=no">/etc/sysconfig/network-scripts/ifcfg-bond0.$VLAN_ID
