@@ -1,6 +1,9 @@
 redis>=2.10.5
 redis-shard>=0.3.3
 falcon>=1.0.0
+falconpb>=1.0.0
+git+https://github.com/yohanboniface/falcon-oauth
+graceful>=0.1.2
 requests>=2.9.1
 Theano>=0.8.2
 Keras>=1.0.4
