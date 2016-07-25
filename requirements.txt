@@ -30,6 +30,7 @@ eventlet>=0.15
 autojenkins>=1.1.0
 artifactory>=0.1.17
 peewee>=2.8.1
+huey>=1.2.0
 beautifulsoup4>=4.4.1
 html5lib>=0.9999999
 socialoauth>=0.3.3
