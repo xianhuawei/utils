@@ -1,6 +1,8 @@
 redis>=2.10.5
 redis-py-cluster>-1.2.0
+rc>=0.3.1
 redis-shard>=0.3.3
+plan>=0.5
 falcon>=1.0.0
 falconpb>=1.0.0
 git+https://github.com/yohanboniface/falcon-oauth
