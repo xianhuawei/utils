@@ -64,6 +64,7 @@ pymongo>=3.2.2
 mongoengine>=0.10.6
 python-dateutil>=2.5.3
 pillow>=3.2.0
+pytesseract>=0.1.6
 netaddr>=0.7.18
 python-etcd>=e0.4.3
 pyleus>=0.3.0
